@@ -1,0 +1,253 @@
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[Rol]    Script Date: 27/07/2024 16:39:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Rol](
+	[IdRol] [int] NOT NULL,
+	[NombreRol] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdRol] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[Usuario]    Script Date: 27/07/2024 16:41:13 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Usuario](
+	[IdUsuario] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NULL,
+	[Apellido] [nvarchar](100) NULL,
+	[Documento] [nvarchar](20) NULL,
+	[Usuario] [nvarchar](50) NULL,
+	[Clave] [nvarchar](50) NULL,
+	[Email] [nvarchar](100) NULL,
+	[IdRol] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdUsuario] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Usuario] ADD  DEFAULT ((1)) FOR [IdRol]
+GO
+
+ALTER TABLE [dbo].[Usuario]  WITH CHECK ADD FOREIGN KEY([IdRol])
+REFERENCES [dbo].[Rol] ([IdRol])
+GO
+
+
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[NotasUsurio]    Script Date: 27/07/2024 16:38:53 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[NotasUsurio](
+	[IdNota] [int] IDENTITY(1,1) NOT NULL,
+	[IdUsuario] [int] NULL,
+	[FechaNota] [date] NULL,
+	[Nota] [nvarchar](max) NULL,
+	[Titulo] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdNota] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[NotasUsurio]  WITH CHECK ADD FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[Articulos]    Script Date: 27/07/2024 16:37:05 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Articulos](
+	[IdProArt] [int] IDENTITY(1,1) NOT NULL,
+	[IdUsuario] [int] NULL,
+	[FeRecibidoArt] [date] NULL,
+	[FeEntregaArt] [date] NULL,
+	[CodigoArt] [nvarchar](50) NULL,
+	[ModeloArt] [nvarchar](100) NULL,
+	[TalleArt] [nvarchar](50) NULL,
+	[CantArt] [int] NULL,
+	[PrecioUniArt] [decimal](10, 2) NULL,
+	[DescripArt] [nvarchar](max) NULL,
+	[TemporadaArt] [nvarchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdProArt] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Articulos]  WITH CHECK ADD FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[EntradaInsumos]    Script Date: 27/07/2024 16:38:07 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[EntradaInsumos](
+	[IdInsumoEnt] [int] IDENTITY(1,1) NOT NULL,
+	[IdUsuario] [int] NULL,
+	[FechaInsEnt] [date] NULL,
+	[CodigoInsEnt] [nvarchar](100) NULL,
+	[NombreInsEnt] [nvarchar](100) NULL,
+	[CantInsEnt] [int] NULL,
+	[PrecioUniInsEnt] [decimal](10, 2) NULL,
+	[IdInsumo] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdInsumoEnt] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[EntradaInsumos]  WITH CHECK ADD FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[Fallas]    Script Date: 27/07/2024 16:38:38 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Fallas](
+	[IdFalla] [int] IDENTITY(1,1) NOT NULL,
+	[IdUsuario] [int] NULL,
+	[CodigoFalla] [nvarchar](50) NULL,
+	[FeRecibidoFalla] [date] NULL,
+	[FeEntregadoFalla] [date] NULL,
+	[ModeloFalla] [nvarchar](100) NULL,
+	[TalleFalla] [nvarchar](50) NULL,
+	[CantFalla] [int] NULL,
+	[PrecioUniFalla] [decimal](10, 2) NULL,
+	[DescripFalla] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdFalla] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Fallas]  WITH CHECK ADD FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[SalidaInsumos]    Script Date: 27/07/2024 16:40:05 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SalidaInsumos](
+	[IdInsumoSal] [int] IDENTITY(1,1) NOT NULL,
+	[IdUsuario] [int] NULL,
+	[FechaInsSal] [date] NULL,
+	[CodigoInsSal] [nvarchar](100) NULL,
+	[NombreInsSal] [nvarchar](100) NULL,
+	[CantInsSal] [int] NULL,
+	[PrecioUniInsSal] [decimal](10, 2) NULL,
+	[IdInsumo] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdInsumoSal] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[SalidaInsumos]  WITH CHECK ADD FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+
+
+USE [TallerTextil]
+GO
+
+/****** Object:  Table [dbo].[StockInsumos]    Script Date: 27/07/2024 16:40:48 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[StockInsumos](
+	[IdInsumoStock] [int] IDENTITY(1,1) NOT NULL,
+	[IdUsuario] [int] NULL,
+	[CodigoStock] [nvarchar](100) NULL,
+	[NombreStock] [nvarchar](100) NULL,
+	[CantStock] [int] NULL,
+	[PrecioUniStock] [decimal](10, 2) NULL,
+	[DescripStock] [nvarchar](max) NULL,
+	[FechaStock] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdInsumoStock] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[StockInsumos]  WITH CHECK ADD FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([IdUsuario])
+GO
+
+USE [TallerTextil]
+GO
+
+INSERT INTO [dbo].[Rol] (IdRol, NombreRol) VALUES (1, 'Usuario');
+INSERT INTO [dbo].[Rol] (IdRol, NombreRol) VALUES (2, 'Admin');
+GO
